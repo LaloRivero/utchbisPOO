@@ -33,6 +33,47 @@ def create_student():
         writer.writerow(student.to_dict())
 
 
+def search_student_by_id(_id):
+    msj = f' Student '
+    print(msj.center(50, '-'))
+    for student in students:
+        if student['id'] == _id:
+            print(f"{student['id']} | {student['name']} {student['last_name']}  ")
+            break
+
+
+def update_student_data_by_id(_id):
+    msj = f' Update Data '
+    print(msj.center(50, '-'))
+    for student in students:
+        if student['id'] == _id:
+            update_data(student)
+            break
+    with open(STUDENTS_TABLE, mode='w') as f:
+        writer = csv.DictWriter()
+
+def update_data(student):
+    update_last_name = input("Update last name? [Y/N]")
+    if update_last_name == 'Y':
+        last_name = validate_data('last_name')
+        student['last_name'] = last_name
+    update_name = input("Update first name? [Y/N]")
+    if update_name == 'Y':
+        first_name = validate_data('first_name')
+        student['name'] = first_name
+    update_group = input("Update group? [Y/N]")
+    if update_group == 'Y':
+        group = validate_data('group')
+        student['group'] = group
+    update_student_id = input("Update student id? [Y/N]")
+    if update_student_id =='Y':
+        student_id = validate_data('student_id')
+        student['id'] = student_id
+    msj = f' Updated Data '
+    print(msj.center(50, '-'))
+    print(f"{student['id']} | {student['name']} {student['last_name']} | {student['group']}")
+
+
 def show_students_by_group(group):
     msj = f'Group {group}'
     print(msj.center(50, '-'))
@@ -59,11 +100,12 @@ def main():
     op = op.upper()
     if op == 'C':
         create_student()
-    elif op == '2':
-        pass  # show_all_students()
-    elif op == '3':
-        for group in groups:
-            print(group)
+    elif op == 'R':
+        _id = validate_data('student_id')
+        search_student_by_id(_id)
+    elif op == 'U':
+        _id = validate_data('student_id')
+        update_student_data_by_id(_id)
     elif op == '4':
         pass  # show_student_by_id()
     elif op == 'S':
