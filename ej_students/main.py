@@ -1,8 +1,10 @@
 import sys
 import csv
+import os
 
 from class_student import Student
 from validation import validate_data
+from update_data import update_data
 # Cambiar el nombre a Nombre Apellido
 
 STUDENT_TABLE = 'students.csv'
@@ -15,6 +17,16 @@ def _initialize_students_from_storage():
         reader = csv.DictReader(f, fieldnames=STUDENTS_SCHEMA)
         for row in reader:
             students.append(row)
+
+
+def _save_students_to_storage():
+    tmp_table_name = f'{STUDENT_TABLE}.tmp'
+    with open(tmp_table_name, mode='w') as f:
+        writer = csv.DictWriter(f, fieldnames=STUDENTS_SCHEMA)
+        writer.writerows(students)
+        f.close()
+        os.remove(STUDENT_TABLE)
+        os.rename(tmp_table_name, STUDENT_TABLE)
 
 
 def create_student():
@@ -30,6 +42,41 @@ def create_student():
     with open(STUDENT_TABLE, mode='a') as f:
         writer = csv.DictWriter(f, fieldnames=STUDENTS_SCHEMA)
         writer.writerow(student.to_dict())
+
+
+def search_student_by_id(_id):
+    msj = f' Search Student '
+    print(msj.center(50, '-'))
+
+    for student in students:
+        if student['id'] == _id:
+            print(f"{student['id']} | {student['name']} {student['last_name']} | {student['group']}")
+
+
+def update_student_data_by_id(_id):
+    msj = f' Update Student Data'
+    print(msj.center(50, '-'))
+
+    for student in students:
+        if student['id'] == _id:
+            student = update_data(student)
+
+    _save_students_to_storage()
+
+
+def delete_student_by_id(_id):
+    msj = f' Delete Student '
+    print(msj.center(50, '-'))
+
+    for i, student in enumerate(students):
+        if student['id'] == _id:
+            print(f"{student['id']} | {student['name']} {student['last_name']} | {student['group']}")
+            sure = input('Are you sure to delete this student?[Y/Enter to exit]')
+            if sure == 'Y':
+                del students[i]
+            else:
+                sys.exit()
+    _save_students_to_storage()
 
 
 def show_students_by_group(group):
@@ -58,13 +105,15 @@ def main():
     op = op.upper()
     if op == 'C':
         create_student()
-    elif op == '2':
-        pass  # show_all_students()
-    elif op == '3':
-        for group in groups:
-            print(group)
-    elif op == '4':
-        pass  # show_student_by_id()
+    elif op == 'R':
+        _id = validate_data('student_id')
+        search_student_by_id(_id)
+    elif op == 'U':
+        _id = validate_data('student_id')
+        update_student_data_by_id(_id)
+    elif op == 'D':
+        _id = validate_data('student_id')
+        delete_student_by_id(_id)
     elif op == 'S':
         group = input('''
         [1] utchbis21m

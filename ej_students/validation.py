@@ -3,7 +3,7 @@ def validate_data(type_of_data):
 
     if type_of_data == 'last_name':
         while True:
-            last_name = input('Type your last name: ').upper()
+            last_name = input('Type student last name: ').upper()
             if len(last_name) < 3:
                 print('ERROR last name not valid, please try again.')
             elif last_name == 'EXIT':
@@ -13,7 +13,7 @@ def validate_data(type_of_data):
 
     elif type_of_data == 'first_name':
         while True:
-            first_name = input('Type your name: ').upper()
+            first_name = input('Type student name: ').upper()
             if len(first_name) < 3:
                 print('ERROR name not valid, please try again.')
             elif first_name == 'EXIT':
@@ -39,7 +39,7 @@ def validate_data(type_of_data):
 
     elif type_of_data == 'student_id':
         while True:
-            student_id = input('Type your id: ')
+            student_id = input('Type student id: ')
 
             if student_id == 'exit':
                 sys.exit()

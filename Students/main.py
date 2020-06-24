@@ -48,9 +48,15 @@ def update_student_data_by_id(_id):
     for student in students:
         if student['id'] == _id:
             update_data(student)
-            break
-    with open(STUDENTS_TABLE, mode='w') as f:
-        writer = csv.DictWriter()
+
+    tmp_table_name = '{}.tmp'.format(STUDENTS_TABLE)
+    with open(tmp_table_name, mode='w') as f:
+        writer = csv.DictWriter(f, fieldnames=STUDENTS_SCHEMA)
+        writer.writerows(students)
+        f.close()
+        os.remove(STUDENTS_TABLE)
+        os.rename(tmp_table_name, STUDENTS_TABLE)
+
 
 def update_data(student):
     update_last_name = input("Update last name? [Y/N]")
@@ -66,12 +72,34 @@ def update_data(student):
         group = validate_data('group')
         student['group'] = group
     update_student_id = input("Update student id? [Y/N]")
-    if update_student_id =='Y':
+    if update_student_id == 'Y':
         student_id = validate_data('student_id')
         student['id'] = student_id
     msj = f' Updated Data '
     print(msj.center(50, '-'))
     print(f"{student['id']} | {student['name']} {student['last_name']} | {student['group']}")
+
+
+def delete_student_by_id(_id):
+    msj = f' Deleted Student '
+    print(msj.center(50, '-'))
+    flag = False
+    for i, student in enumerate(students):
+        if student['id'] == _id:
+            print(f"{student['id']} | {student['name']} {student['last_name']} | {student['group']}")
+            del students[i]
+            flag = True
+
+            tmp_table_name = '{}.tmp'.format(STUDENTS_TABLE)
+            with open(tmp_table_name, mode='w') as f:
+                writer = csv.DictWriter(f, fieldnames=STUDENTS_SCHEMA)
+                writer.writerows(students)
+                f.close()
+                os.remove(STUDENTS_TABLE)
+                os.rename(tmp_table_name, STUDENTS_TABLE)
+
+    if flag == False:
+        print('Student is not in student list')
 
 
 def show_students_by_group(group):
@@ -106,8 +134,9 @@ def main():
     elif op == 'U':
         _id = validate_data('student_id')
         update_student_data_by_id(_id)
-    elif op == '4':
-        pass  # show_student_by_id()
+    elif op == 'D':
+        _id = validate_data('student_id')
+        delete_student_by_id(_id)
     elif op == 'S':
         group = input('''
         [1] utchbis21m
