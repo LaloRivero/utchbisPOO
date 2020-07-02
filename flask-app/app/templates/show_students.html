@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block title %}
+    Welcome
+    {{ super() }} 
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h1>Students</h1>
+
+        <!-- {% for student in students%}
+            <h1>{{ student.student_id }}</h1>
+        {% endfor %} -->
+        <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">id</th>
+                <th scope="col">First</th>
+                <th scope="col">Last</th>
+                <th scope="col">Group</th>
+                <th scope="col">Email</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for student in students %}  
+                <tr>
+                    <th scope="row">{{ student.student_id }}</th>
+                    <td>{{ student.first_name }}</td>
+                    <td>{{ student.last_name }}</td>
+                    <td>{{ student.group }}</td>
+                    <td>{{ student.email}}</td>
+                </tr>
+              {% endfor%}
+            </tbody>
+          </table>
+          <a href="{{ url_for('index') }}" 
+          class="btn btn-primary btn-m active" 
+          role="button" aria-pressed="true">Go back</a>
+    </div>    
+{% endblock %}

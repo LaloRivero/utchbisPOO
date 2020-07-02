@@ -1,14 +1,28 @@
 {% extends 'bootstrap/base.html' %}
 {% block head %}
     {{ super() }}
-    <title> {% block title %} Students | {% endblock %}</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css')}}">
+    <title> {% block title %} | Students {% endblock %}</title>
+    <!-- <link rel="stylesheet" href="{{ url_for('static',filename='css/main.css')}}"> -->
 {% endblock%}
 {% block body %}
+    {% for message in get_flashed_messages() %}
+        {% if message.startswith('E') %}
+            <div class="alert alert-danger alert-dismissable">
+                <button type="button" data-dismiss='alert' class="close">&times;</button>
+                {{ message }}
+            </div>
+        {% else %}
+            <div class="alert alert-success alert-dismissable">
+                <button type="button" data-dismiss='alert' class="close">&times;</button>
+                {{ message }}
+            </div>
+        {% endif%}
+    {% endfor %}
+
     {% block content %}
     {% endblock %}
-    
+
     {% block scripts %}
         {{ super() }}
-    {% endblock%}
+    {% endblock %}
 {% endblock %}

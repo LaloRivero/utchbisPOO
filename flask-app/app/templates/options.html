@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block title %}
+    Welcome
+    {{ super() }} 
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h1 style="padding-bottom: 30px;">Select an option</h1>
+        <a href="{{ url_for('create_students') }}" 
+           class="btn btn-primary btn-m active" 
+           role="button" aria-pressed="true">Create a Student</a>
+        <a href="{{ url_for('show_students') }}" 
+           class="btn btn-primary btn-m active" 
+           role="button" aria-pressed="true">Show Students</a>
+        <a href="{{ url_for('search_student', type_op = 'update') }}" 
+           class="btn btn-primary btn-m active" 
+           role="button" aria-pressed="true">Update Student</a>
+        <a href="{{ url_for('search_student', type_op = 'delete') }}" 
+           class="btn btn-primary btn-m active" 
+           role="button" aria-pressed="true">Delete Student</a>
+    </div>    
+{% endblock %}
